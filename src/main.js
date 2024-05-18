@@ -16,7 +16,10 @@ form.addEventListener('submit', event => {
   event.preventDefault();
   const query = input.value.trim();
   if (!query) {
-    alert('Пожалуйста, введите ключевое слово для поиска');
+    iziToast.warning({
+      title: 'Warning',
+      message: 'Пожалуйста, введите ключевое слово для поиска',
+    });
     return;
   }
 
@@ -28,12 +31,29 @@ form.addEventListener('submit', event => {
       // Скрыть индикатор загрузки
       loader.classList.add('hidden'); // Добавлено
 
+      // Очистить галерею перед рендерингом новых изображений
+      gallery.innerHTML = '';
+
       renderImages(images, gallery);
 
-      // Инициализируйте lightbox после добавления новых изображений
-      lightbox = new SimpleLightbox('.image-card a', {
-        /* опции */
-      });
+      // Проверьте, есть ли изображения перед инициализацией lightbox
+      if (gallery.querySelectorAll('.image-card a').length > 0) {
+        // Инициализируйте lightbox после добавления новых изображений
+        lightbox = new SimpleLightbox('.image-card a', {
+          /* опции */
+        });
+        // Добавьте обработчик событий для клика по изображению
+        gallery.addEventListener('click', event => {
+          if (event.target.nodeName !== 'IMG') return;
+          if (lightbox) {
+            lightbox.show();
+          } else {
+            console.error('Lightbox is not initialized.');
+          }
+        });
+      } else {
+        console.error('No images found for lightbox to handle.');
+      }
       input.value = '';
     })
     .catch(error => {
@@ -44,10 +64,4 @@ form.addEventListener('submit', event => {
           'Произошла ошибка при загрузке изображений. Пожалуйста, попробуйте еще раз.',
       });
     });
-});
-
-// Добавьте обработчик событий для клика по изображению
-gallery.addEventListener('click', event => {
-  if (event.target.nodeName !== 'IMG') return;
-  lightbox.show();
 });

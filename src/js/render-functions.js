@@ -1,3 +1,6 @@
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
 export function renderImages(images, container) {
   if (images.length === 0) {
     iziToast.error({
