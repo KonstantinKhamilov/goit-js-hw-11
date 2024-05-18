@@ -43,14 +43,13 @@ form.addEventListener('submit', event => {
           /* опции */
         });
         // Добавьте обработчик событий для клика по изображению
-        gallery.addEventListener('click', event => {
-          if (event.target.nodeName !== 'IMG') return;
-          if (lightbox) {
-            lightbox.show();
-          } else {
-            console.error('Lightbox is not initialized.');
-          }
-        });
+        //  gallery.addEventListener('click', event => {
+        if (event.target.nodeName !== 'IMG') return;
+        if (lightbox) {
+          lightbox.refresh();
+        } else {
+          console.error('Lightbox is not initialized.');
+        }
       } else {
         console.error('No images found for lightbox to handle.');
       }
